@@ -1,7 +1,6 @@
 from socket import *
 from ftplib import FTP, all_errors
 
-#abby - let's see if i can push
 
 # Creates a TCP socket
 # SOCK_STREAM is used for TCP connections
@@ -9,11 +8,11 @@ clientSocket = socket(AF_INET, SOCK_STREAM)
 
 #establish connection
 def serverConnect(serverAddr, serverPort):
-    clientSocket.connect(serverAddr, serverPort)
+    clientSocket.connect((serverAddr, serverPort))
     return clientSocket
 '''ftp = FTP()
 ftp.connect(ip_addr, port)
-ftp.login(user, password) '''
+ftp.login(user, password) ''' 
 
 def sendCommand(clientSocket, command):
     clientSocket.send(command.encode())
@@ -24,38 +23,47 @@ def sendCommand(clientSocket, command):
 #not completely sure if this is using sendCommand correctly
 def download_file(clientSocket, fname):
     sendCommand(clientSocket, f'RETR {fname}\r\n')
-    with open(fname, wb) as f:
+    with open(fname, "wb") as f:
         while True:
             text = clientSocket.recv(1024).decode()
-            f.write(text) 
+            if not text:
+                break
+            f.write(text)
 
  
 
 #upload file
 def upload_file(clientSocket, fname):
-    sendCommand(clientSocket, f'RETR {fname}\r\n')
-    with open(fname, rb) as f:
+    sendCommand(clientSocket, f'STOR {fname}\r\n')
+    with open(fname, "rb") as f:
         while True:
             text = f.read(1024)
+            if not text:
+                break
             clientSocket.send(text)
 
 
-ftp.quit()
+# ftp.quit()
 
 def main():
+
+    #connecting
+    sampleIP = "localhost"
+    serverPort = 12000
+    serverConnect(sampleIP, serverPort)
     
     while True:
         command = input("Enter command (CONNECT, LIST, RETRIEVE, STORE, QUIT): ")
 
-        #connecting
-        sampleIP = "10.0.0.1"
-        clientSocket = serverConnect(sampleIP, 21)
-
         # Sending the command to the server
         sendCommand(clientSocket, command)
 
-        #download file
-        download_file(clientSocket, "test.txt")
+        if command.upper() == "QUIT":
+            print("Closing connection on client end")
+            clientSocket.close()
+            break
+        # #download file
+        # download_file(clientSocket, "test.txt")
 
         
 
