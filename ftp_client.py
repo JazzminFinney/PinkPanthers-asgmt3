@@ -6,6 +6,7 @@ import os
 # Creates a TCP socket
 # SOCK_STREAM is used for TCP connections
 clientSocket = socket(AF_INET, SOCK_STREAM)
+clientSocket.settimeout(5.0)
 
 #establish connection
 def serverConnect(serverAddr, serverPort):
@@ -23,10 +24,13 @@ def sendCommand(clientSocket, command):
 def receiveList(clientSocket):
     fileList = ""
     while True:
-        text = clientSocket.recv(1024).decode()
-        if not text:
+        #print("testing")
+        try:
+            text = clientSocket.recv(1024).decode()
+            fileList += text
+        except timeout:
+            print("End of data")
             break
-        fileList += text
     print("Files in the server directory:")
     print(fileList)
     
