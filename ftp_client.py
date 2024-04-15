@@ -75,6 +75,11 @@ def main():
             fname = input("Enter name of file to store: ")
             sendCommand(clientSocket, f"{command} {fname}")
             upload_file(clientSocket, fname)
+            
+        elif command.upper() == "RETRIEVE":
+            fname = input("Enter name of file to retrieve: ")
+            sendCommand(clientSocket, f"{command} {fname}")
+            download_file(clientSocket, fname)
     
         elif command.upper() == "QUIT":
             sendCommand(clientSocket, command)

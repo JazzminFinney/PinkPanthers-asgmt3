@@ -45,6 +45,15 @@ while True:
                     break
                 f.write(data)
         sendReponse(clientSocket)
+        
+    elif command.upper().startswith("RETRIEVE"):
+        fname = command.split()[1]
+        if os.path.exists(fname):
+            with open(fname, "rb") as f:
+                data = f.read()
+                clientSocket.sendall(data)
+        else:
+            print("File doesn't exist")
 
     elif command.upper() == "QUIT":
         print("Terminating connection")
