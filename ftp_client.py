@@ -18,21 +18,18 @@ ftp.login(user, password) '''
 
 def sendCommand(clientSocket, command):
     clientSocket.send(command.encode())
-    response = clientSocket.recv(1024).decode()
-    print(response)
+    # response = clientSocket.recv(1024).decode()
+    # print(response)
 
 def receiveList(clientSocket):
     fileList = ""
     while True:
-        #print("testing")
         try:
             text = clientSocket.recv(1024).decode()
-            print(text)
             fileList += text
         except timeout:
             print("End of data")
             break
-    print("Files in the server directory:")
     print(fileList)
     
 #download file    

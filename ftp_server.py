@@ -25,37 +25,38 @@ while True:
     clientSocket, addr = tcpSocket.accept()
     print(f"Connection from {addr}")
     
-    # Receiving the command from the client
-    command = clientSocket.recv(1024).decode()
-    print(f"Received command: {command}")
-    print(f"Waiting for a new command...")
+    while True:
+        # Receiving the command from the client
+        command = clientSocket.recv(1024).decode()
+        print(f"Received command: {command}")
+        print(f"Waiting for a new command...")
     
     
-    if command.upper() == "LIST":
-        fileList = listFiles()
-        clientSocket.send(fileList.encode())
-        sendReponse(clientSocket)
+        if command.upper() == "LIST":
+            fileList = listFiles()
+            clientSocket.send(fileList.encode())
+            sendReponse(clientSocket)
         
-    elif command.upper().startswith("STORE"):
-        fname = command.split()[1]
-        with open(fname, "wb") as f:
-            while True:
-                data = clientSocket.recv(1024)
-                if not data:
-                    break
-                f.write(data)
-        sendReponse(clientSocket)
+        elif command.upper().startswith("STORE"):
+            fname = command.split()[1]
+            with open(fname, "wb") as f:
+                while True:
+                    data = clientSocket.recv(1024)
+                    if not data:
+                        break
+                    f.write(data)
+            sendReponse(clientSocket)
         
-    elif command.upper().startswith("RETRIEVE"):
-        fname = command.split()[1]
-        if os.path.exists(fname):
-            with open(fname, "rb") as f:
-                data = f.read()
-                clientSocket.sendall(data)
-        else:
-            print("File doesn't exist")
+        elif command.upper().startswith("RETRIEVE"):
+            fname = command.split()[1]
+            if os.path.exists(fname):
+                with open(fname, "rb") as f:
+                    data = f.read()
+                    clientSocket.sendall(data)
+            else:
+                print("File doesn't exist")
 
-    elif command.upper() == "QUIT":
-        print("Terminating connection")
-        clientSocket.close()
-        break
+        elif command.upper() == "QUIT":
+            print("Terminating connection")
+            clientSocket.close()
+            break
