@@ -1,5 +1,6 @@
 from socket import *
 from ftplib import FTP, all_errors
+import os
 
 
 # Creates a TCP socket
@@ -18,10 +19,20 @@ def sendCommand(clientSocket, command):
     clientSocket.send(command.encode())
     response = clientSocket.recv(1024).decode()
     print(response)
+
+def receiveList(clientSocket):
+    fileList = ""
+    while True:
+        text = clientSocket.recv(1024).decode()
+        if not text:
+            break
+        fileList += text
+    print("Files in the server directory:")
+    print(fileList)
     
 #download file    
 #not completely sure if this is using sendCommand correctly
-def download_file(clientSocket, fname):
+def download_file(clientSocket, fname): 
     sendCommand(clientSocket, f'RETR {fname}\r\n')
     with open(fname, "wb") as f:
         while True:
@@ -56,14 +67,25 @@ def main():
         command = input("Enter command (CONNECT, LIST, RETRIEVE, STORE, QUIT): ")
 
         # Sending the command to the server
-        sendCommand(clientSocket, command)
-
-        if command.upper() == "QUIT":
+        if command.upper() == "LIST":
+            sendCommand(clientSocket, command)
+            receiveList(clientSocket)
+        
+        elif command.upper() == "STORE":
+            fname = input("Enter name of file to store: ")
+            sendCommand(clientSocket, f"{command} {fname}")
+            upload_file(clientSocket, fname)
+    
+        elif command.upper() == "QUIT":
+            sendCommand(clientSocket, command)
             print("Closing connection on client end")
             clientSocket.close()
             break
         # #download file
         # download_file(clientSocket, "test.txt")
+        
+        else:
+            print("Invalid command")
 
         
 
