@@ -29,8 +29,13 @@ while True:
         # Receiving the command from the client
         command = clientSocket.recv(1024).decode()
         print(f"Received command: {command}")
-        print(f"Waiting for a new command...")
-    
+        if command.upper() != "QUIT":
+            print(f"Waiting for a new command...")
+
+        if command.upper() == "QUIT":
+            print("Terminating connection")
+            clientSocket.close()
+            break
     
         if command.upper() == "LIST":
             fileList = listFiles()
@@ -55,8 +60,8 @@ while True:
                     clientSocket.sendall(data)
             else:
                 print("File doesn't exist")
+                
+    clientSocket.close()
+    break
 
-        elif command.upper() == "QUIT":
-            print("Terminating connection")
-            clientSocket.close()
-            break
+tcpSocket.close()

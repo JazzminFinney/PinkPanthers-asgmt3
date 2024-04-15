@@ -38,10 +38,14 @@ def download_file(clientSocket, fname):
     sendCommand(clientSocket, f'RETR {fname}\r\n')
     with open(fname, "wb") as f:
         while True:
-            text = clientSocket.recv(1024).decode()
-            if not text:
+            try:
+                text = clientSocket.recv(1024).decode()
+                if not text:
+                    break
+                f.write(text)
+            except timeout:
+                print(f"Downloaded {fname}")
                 break
-            f.write(text)
 
  
 
@@ -54,6 +58,7 @@ def upload_file(clientSocket, fname):
             if not text:
                 break
             clientSocket.send(text)
+    print(f"Uploaded {fname}")
 
 
 # ftp.quit()
