@@ -74,6 +74,13 @@ def main():
         command = input("Enter command (CONNECT, LIST, RETRIEVE, STORE, QUIT): ")
 
         # Sending the command to the server
+        if command.upper() == "CONNECT":
+            ipaddr = input("Enter IP Address of server to connect to: ")
+            port = input("Enter port number: ")
+            sendCommmand(clientSocket, f"{command} {ipaddr} {port}")
+            clientSocket.connect(ipaddr, port)
+            print("You are now connected")
+
         if command.upper() == "LIST":
             sendCommand(clientSocket, command)
             receiveList(clientSocket)
@@ -93,8 +100,6 @@ def main():
             print("Closing connection on client end")
             clientSocket.close()
             break
-        # #download file
-        # download_file(clientSocket, "test.txt")
         
         else:
             print("Invalid command")
