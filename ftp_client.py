@@ -27,6 +27,7 @@ def receiveList(clientSocket):
         #print("testing")
         try:
             text = clientSocket.recv(1024).decode()
+            print(text)
             fileList += text
         except timeout:
             print("End of data")
