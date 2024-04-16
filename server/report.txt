@@ -1,2 +1,9 @@
-words words words
-
+Problems We Ran Into
+
+Abby:
+One problem that I faced was that I originally began to write a program that catered solely to FTP and not considering
+the implementation using TCP sockets. This created a predicament for me that was able to be solved with the help of my 
+partners. They helped me realize that we needed to use clientSocket to send and receive information back and forth from
+the client to the server. (Like we've been doing all semester).
+
+

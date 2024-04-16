@@ -38,6 +38,7 @@ def download_file(clientSocket, fname):
             break
     with open(fname, "w") as f:
         f.write(text)
+    print(f"{fname} downloaded successfully")
 
 #upload file
 def upload_file(clientSocket, fname):
