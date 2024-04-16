@@ -28,7 +28,7 @@ def receiveList(clientSocket):
             text = clientSocket.recv(1024).decode()
             fileList += text
         except timeout:
-            print("End of data")
+            #print("End of data")
             break
     print(fileList)
     
@@ -36,16 +36,19 @@ def receiveList(clientSocket):
 #not completely sure if this is using sendCommand correctly
 def download_file(clientSocket, fname): 
     sendCommand(clientSocket, f'RETR {fname}\r\n')
-    with open(fname, "wb") as f:
-        while True:
-            try:
-                text = clientSocket.recv(1024).decode()
-                if not text:
-                    break
-                f.write(text)
-            except timeout:
-                print(f"Downloaded {fname}")
+    text = ""
+    while True:
+        try:
+            new_data = clientSocket.recv(1024).decode()
+            if new_data == '':
                 break
+            text += new_data
+        except error:
+            print("End of data")
+            break
+    with open(fname, "w") as f:
+        f.write(text)
+
 
  
 
