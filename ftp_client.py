@@ -30,6 +30,7 @@ def receiveList(clientSocket):
         except timeout:
             #print("End of data")
             break
+    fileList = fileList.replace("Command received and processed", "")  #remove the response
     print(fileList)
     
 #download file    
