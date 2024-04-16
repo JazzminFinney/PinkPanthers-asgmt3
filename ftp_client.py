@@ -34,7 +34,6 @@ def download_file(clientSocket, fname):
                 break
             text += new_data
         except error:
-            print("End of data")
             break
     with open(fname, "w") as f:
         f.write(text)
