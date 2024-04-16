@@ -20,7 +20,7 @@ def listFiles():
     files = os.listdir('.')
     return '\n'.join(files)
 
-def sendReponse(clientSocket):
+def sendResponse(clientSocket):
     response = "Command received and processed"
     clientSocket.send(response.encode())
 
@@ -53,7 +53,7 @@ while True:
         if command.upper() == "LIST":
             fileList = listFiles()
             clientSocket.send(fileList.encode())
-            sendReponse(clientSocket)
+            sendResponse(clientSocket)
     
         
         elif command.upper().startswith("STORE"):
@@ -66,7 +66,7 @@ while True:
                         f.write(data)
                         break
                     f.write(data)
-            sendReponse(clientSocket)
+            sendResponse(clientSocket)
         
         elif command.upper().startswith("RETRIEVE"):
             fname = command.split()[1]

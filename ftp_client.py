@@ -8,18 +8,8 @@ import os
 clientSocket = socket(AF_INET, SOCK_STREAM)
 clientSocket.settimeout(5.0)
 
-#establish connection
-def serverConnect(serverAddr, serverPort):
-    clientSocket.connect((serverAddr, serverPort))
-    return clientSocket
-'''ftp = FTP()
-ftp.connect(ip_addr, port)
-ftp.login(user, password) ''' 
-
 def sendCommand(clientSocket, command):
     clientSocket.send(command.encode())
-    # response = clientSocket.recv(1024).decode()
-    # print(response)
 
 def receiveList(clientSocket):
     fileList = ""
@@ -34,7 +24,6 @@ def receiveList(clientSocket):
     print(fileList)
     
 #download file    
-#not completely sure if this is using sendCommand correctly
 def download_file(clientSocket, fname): 
     sendCommand(clientSocket, f'RETR {fname}\r\n')
     text = ""
@@ -50,9 +39,6 @@ def download_file(clientSocket, fname):
     with open(fname, "w") as f:
         f.write(text)
 
-
- 
-
 #upload file
 def upload_file(clientSocket, fname):
     #sendCommand(clientSocket, f'STOR {fname}\r\n')
@@ -66,47 +52,48 @@ def upload_file(clientSocket, fname):
     print(f"Uploaded {fname}")
 
 
-# ftp.quit()
-
 def main():
-
-    #connecting
-    '''sampleIP = "localhost"
-    serverPort = 12000
-    serverConnect(sampleIP, serverPort)'''
+    
+    is_connected = False
     
     while True:
-        command = input("Enter command (CONNECT, LIST, RETRIEVE, STORE, QUIT): ")
+        if not is_connected:
+            command = input("Enter command (CONNECT): ")
+        else:
+            command = input("Enter command (LIST, RETRIEVE, STORE, QUIT): ")
 
         # Sending the command to the server
         if command.upper() == "CONNECT":
             ipaddr = input("Enter IP Address of server to connect to: ")
-            port = input("Enter port number: ")
-            sendCommand(clientSocket, f"{command} {ipaddr} {port}")
-            clientSocket.connect(ipaddr, port)
+            port = int(input("Enter port number: "))
+            # sendCommand(clientSocket, f"{command} {ipaddr} {port}")
+            clientSocket.connect((ipaddr, port))
             print("You are now connected")
-
-        if command.upper() == "LIST":
-            sendCommand(clientSocket, command)
-            receiveList(clientSocket)
-        
-        elif command.upper() == "STORE":
-            fname = input("Enter name of file to store: ")
-            sendCommand(clientSocket, f"{command} {fname}")
-            upload_file(clientSocket, fname)
+            is_connected = True
             
-        elif command.upper() == "RETRIEVE":
-            fname = input("Enter name of file to retrieve: ")
-            sendCommand(clientSocket, f"{command} {fname}")
-            download_file(clientSocket, fname)
+        if is_connected:
+
+            if command.upper() == "LIST":
+                sendCommand(clientSocket, command)
+                receiveList(clientSocket)
+        
+            elif command.upper() == "STORE":
+                fname = input("Enter name of file to store: ")
+                sendCommand(clientSocket, f"{command} {fname}")
+                upload_file(clientSocket, fname)
+            
+            elif command.upper() == "RETRIEVE":
+                fname = input("Enter name of file to retrieve: ")
+                sendCommand(clientSocket, f"{command} {fname}")
+                download_file(clientSocket, fname)
     
-        elif command.upper() == "QUIT":
+        if command.upper() == "QUIT":
             sendCommand(clientSocket, command)
             print("Closing connection on client end")
             clientSocket.close()
             break
         
-        else:
+        elif not is_connected and command.upper() != "CONNECT":
             print("Invalid command")
 
         
