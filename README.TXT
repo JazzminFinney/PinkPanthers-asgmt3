@@ -31,3 +31,12 @@ Compilation:
 Running the File:
 -----------------
 After executing the file using the above command, the client will guide you through entering commands. You're given the following options: CONNECT, LIST, STORE, RETRIEVE, and QUIT. Use CONNECT to connect to the FTP server, LIST to see what files it has, STORE to upload files, RETRIEVE to download them, and QUIT to sign off.
+
+// // //
+
+report.txt
+
+Description:
+------------
+This file contains a log of the problems the team encountered and how we solved them.
+No compilation or running instructions needed as it is a simple text file.
