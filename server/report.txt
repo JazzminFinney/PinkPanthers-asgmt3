@@ -27,3 +27,12 @@ getting uploaded and downloaded.
 Another issue we had was getting an error after trying to connect the client to the server that
 an int for the port number was expected rather than a string. We fixed this problem by simply
 casting an Int to where we are prompting the user to enter the port number from the command line.
+
+We also encountered issues relating to the recv() funnction not getting any data and blocking the 
+program's execution. We resolved this by sending a sequence of characters to indicate the client/
+server was done transmitting data so that the other side would stop trying to read data that 
+was never sent. 
+
+There were some issues we had with cross-contamination of file data and client/server commands.
+We fixed this by manipulating the file data after transmission to sanitize it of any client/server
+messages. Specifically, we used the string replace method to remove this superfluous data.
