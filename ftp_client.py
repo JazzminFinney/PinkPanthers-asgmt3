@@ -54,13 +54,14 @@ def download_file(clientSocket, fname):
 
 #upload file
 def upload_file(clientSocket, fname):
-    sendCommand(clientSocket, f'STOR {fname}\r\n')
+    #sendCommand(clientSocket, f'STOR {fname}\r\n')
     with open(fname, "rb") as f:
         while True:
             text = f.read(1024)
             if not text:
                 break
             clientSocket.send(text)
+    clientSocket.send("\t\t\t".encode())    #end of file
     print(f"Uploaded {fname}")
 
 

@@ -54,10 +54,12 @@ while True:
         
         elif command.upper().startswith("STORE"):
             fname = command.split()[1]
-            with open(fname, "wb") as f:
+            with open(fname, "w") as f:
                 while True:
-                    data = clientSocket.recv(1024)
-                    if not data:
+                    data = clientSocket.recv(1024).decode()
+                    if "\t\t\t" in data:    
+                        data = data.replace("\t\t\t", "")
+                        f.write(data)
                         break
                     f.write(data)
             sendReponse(clientSocket)
