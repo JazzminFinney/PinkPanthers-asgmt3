@@ -69,9 +69,9 @@ def upload_file(clientSocket, fname):
 def main():
 
     #connecting
-    sampleIP = "localhost"
+    '''sampleIP = "localhost"
     serverPort = 12000
-    serverConnect(sampleIP, serverPort)
+    serverConnect(sampleIP, serverPort)'''
     
     while True:
         command = input("Enter command (CONNECT, LIST, RETRIEVE, STORE, QUIT): ")
@@ -80,7 +80,7 @@ def main():
         if command.upper() == "CONNECT":
             ipaddr = input("Enter IP Address of server to connect to: ")
             port = input("Enter port number: ")
-            sendCommmand(clientSocket, f"{command} {ipaddr} {port}")
+            sendCommand(clientSocket, f"{command} {ipaddr} {port}")
             clientSocket.connect(ipaddr, port)
             print("You are now connected")
 

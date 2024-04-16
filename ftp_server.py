@@ -12,6 +12,10 @@ tcpSocket.bind(('localhost', 12000))
 tcpSocket.listen(5)
 print('The server is listening on port 12000')
 
+def serverConnect(serverAddr, serverPort):
+    clientSocket.connect((serverAddr, serverPort))
+    return clientSocket
+
 def listFiles():
     files = os.listdir('.')
     return '\n'.join(files)
@@ -41,7 +45,7 @@ while True:
 
         if command.upper().startswith("CONNECT"):
             ipAddr = command.split()[1]
-            portNum = command.split()[2]
+            portNum = int(command.split()[2])
             clientSocket = serverConnect(ipAddr, portNum)
             sendResponse(clientSocket)
             
