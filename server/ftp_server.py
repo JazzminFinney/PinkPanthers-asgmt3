@@ -33,7 +33,6 @@ while True:
         # Receiving the command from the client
         command = clientSocket.recv(1024).decode()
         print(f"Received command: {command}")
-        #print(f"Waiting for a new command...")
     
         if command.upper() != "QUIT":
             print(f"Waiting for a new command...")
@@ -49,13 +48,11 @@ while True:
             clientSocket = serverConnect(ipAddr, portNum)
             sendResponse(clientSocket)
             
-
         if command.upper() == "LIST":
             fileList = listFiles()
             clientSocket.send(fileList.encode())
             sendResponse(clientSocket)
     
-        
         elif command.upper().startswith("STORE"):
             fname = command.split()[1]
             with open(fname, "w") as f:

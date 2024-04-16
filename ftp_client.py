@@ -18,12 +18,11 @@ def receiveList(clientSocket):
             text = clientSocket.recv(1024).decode()
             fileList += text
         except timeout:
-            #print("End of data")
             break
-    fileList = fileList.replace("Command received and processed", "")  #remove the response
+    fileList = fileList.replace("Command received and processed", "")  # Remove the response
     print(fileList)
     
-#download file    
+# Download file    
 def download_file(clientSocket, fname): 
     sendCommand(clientSocket, f'RETR {fname}\r\n')
     text = ""
@@ -39,18 +38,16 @@ def download_file(clientSocket, fname):
         f.write(text)
     print(f"{fname} downloaded successfully")
 
-#upload file
+# Upload file
 def upload_file(clientSocket, fname):
-    #sendCommand(clientSocket, f'STOR {fname}\r\n')
     with open(fname, "rb") as f:
         while True:
             text = f.read(1024)
             if not text:
                 break
             clientSocket.send(text)
-    clientSocket.send("\t\t\t".encode())    #end of file
+    clientSocket.send("\t\t\t".encode())    # End of file
     print(f"Uploaded {fname}")
-
 
 def main():
     
@@ -66,7 +63,6 @@ def main():
         if command.upper() == "CONNECT":
             ipaddr = input("Enter IP Address of server to connect to: ")
             port = int(input("Enter port number: "))
-            # sendCommand(clientSocket, f"{command} {ipaddr} {port}")
             clientSocket.connect((ipaddr, port))
             print("You are now connected")
             is_connected = True
@@ -97,6 +93,5 @@ def main():
             print("Invalid command")
 
         
-
 if __name__ == "__main__":
     main()
