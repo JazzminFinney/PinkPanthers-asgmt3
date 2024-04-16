@@ -1,7 +1,29 @@
 Problems We Ran Into
 
-One problem that we faced was that we originally began to write a program that catered solely to FTP and not considering
-the implementation using TCP sockets. We soon realized that we needed to use clientSocket to send and receive information back and forth from
-the client to the server, like we've been doing all semester. 
+One problem that we faced was that we originally began to write a program that catered solely to 
+FTP and not considering the implementation using TCP sockets. We soon realized that we needed to 
+use clientSocket to send and receive information back and forth from the client to the server, 
+like we've been doing all semester. 
 
+Another problem we ran into was not realizing that socket.connect() takes only one argument. 
+Originally we were trying to use it in the form socket.connect(ipaddress, port), but after 
+looking at the error logs, we updated the code to be ((ipaddress, port)) which solved the issue. 
 
+Additional problems were found in difficulties in managing the looping throughout the client. 
+We got an error that we were trying to connect on a socket that was already connected because 
+we failed to bring the connection request outside of the loop, so it wouldn't keep trying to 
+reconnect to the same socket. 
+
+One other problem that occurred was that after listing the files from the server, the client 
+would freeze and not prompt for a new command. We ended up fixing this issue by again managing the 
+looping system better and making sure all commands were properly setting the user up to be asked 
+for another command. 
+
+Regarding testing the upload and download functions, we originally struggled and couldn't tell 
+if they were working quite properly because we had all the files in the same hierarchy, once 
+we moved the server to its own directory, we were able to clearly see how the files were 
+getting uploaded and downloaded.
+
+Another issue we had was getting an error after trying to connect the client to the server that
+an int for the port number was expected rather than a string. We fixed this problem by simply
+casting an Int to where we are prompting the user to enter the port number from the command line.
